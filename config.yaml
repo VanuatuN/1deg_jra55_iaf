@@ -8,66 +8,143 @@
 # (you may need to add the corresponding PBS -l storage flag in sync_data.sh)
 # shortpath: /scratch/v45
 
-queue: normal
-walltime: 3:00:00
+scheduler: slurm
+#queue: do not set for slurm
+walltime: 06:00:00
 jobname: 1deg_jra55_iaf
-mem: 1000GB
+mem: 200G
+account: ICT26_ESP
+partition: dcgp_usr_prod
+ncpus: 672
+nnodes: 6
+laboratory: /leonardo_scratch/fast/ICT26_ESP_0/ntilinin/access-om2
+experiment: 1deg_jra55_iaf
+
+
+modules:
+  use:
+      - /leonardo/home/userexternal/ntilinin/ACCESS-NRI/release/modules/linux-rhel8-x86_64
+  load:
+      - intel-oneapi-compilers/2021.2.0-p7vtyvv
+      - netcdf-c/4.7.4-d4klyvu 
+      - netcdf-fortran/4.5.2-5ln2rw2
+      - openmpi/4.1.4-ga6avsd
 
 # Model configuration
 name: common
 model: access-om2
-input: /g/data/ik11/inputs/access-om2/input_20201102/common_1deg_jra55
+
+input:
+  - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/remapping_weights/JRA55/global.1deg/2020.05.30/JRA55_MOM1_conserve2nd.nc
+  - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/remapping_weights/JRA55/global.1deg/2020.05.30/JRA55_MOM1_patch.nc
+  - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/remapping_weights/JRA55/global.1deg/2020.05.30/rmp_jra55_cice_1st_conserve.nc
+  - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/remapping_weights/JRA55/global.1deg/2020.05.30/rmp_jra55_cice_2nd_conserve.nc
+  - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/remapping_weights/JRA55/global.1deg/2020.05.30/rmp_jra55_cice_patch.nc
+
 submodels:
     - name: atmosphere
       model: yatm
-      exe: /g/data/ik11/inputs/access-om2/bin/yatm_d750b4b.exe
+      exe: /leonardo/home/userexternal/ntilinin/COSIMA/access-om2/bin/yatm_444ac5d.exe
       input:
-            - /g/data/ik11/inputs/access-om2/input_20201102/yatm_1deg
-            - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hr/rsds/gr/v20190429
-            - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hr/rlds/gr/v20190429
-            - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hr/prra/gr/v20190429
-            - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hr/prsn/gr/v20190429
-            - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hrPt/psl/gr/v20190429
-            - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/land/day/friver/gr/v20190429
-            - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hrPt/tas/gr/v20190429
-            - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hrPt/huss/gr/v20190429
-            - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hrPt/uas/gr/v20190429
-            - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hrPt/vas/gr/v20190429
-            - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/landIce/day/licalvf/gr/v20190429
+        - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/remapping_weights/JRA55/global.1deg/2020.05.30/rmp_jrar_to_cict_CONSERV.nc
+        - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/OMIP
+            # - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hr/rsds/gr/v20190429
+            # - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hr/rlds/gr/v20190429
+            # - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hr/prra/gr/v20190429
+            # - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hr/prsn/gr/v20190429
+            # - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hrPt/psl/gr/v20190429
+            # - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/land/day/friver/gr/v20190429
+            # - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hrPt/tas/gr/v20190429
+            # - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hrPt/huss/gr/v20190429
+            # - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hrPt/uas/gr/v20190429
+            # - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/atmos/3hrPt/vas/gr/v20190429
+            # - /g/data/qv56/replicas/input4MIPs/CMIP6/OMIP/MRI/MRI-JRA55-do-1-4-0/landIce/day/licalvf/gr/v20190429
       ncpus: 1
+      nnodes: 1
+      npernode: 1
+      partition: dcgp_usr_prod
+
 
     - name: ocean
       model: mom
-      exe: /g/data/ik11/inputs/access-om2/bin/fms_ACCESS-OM_730f0bf_libaccessom2_d750b4b.x
-      input: /g/data/ik11/inputs/access-om2/input_20201102/mom_1deg
+      exe: /leonardo/home/userexternal/ntilinin/COSIMA/access-om2/bin/fms_ACCESS-OM_88a2664-modified_libaccessom2_444ac5d.x
+      input:
+          - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/ocean/grids/mosaic/global.1deg/2020.05.30
+          - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/ocean/grids/bathymetry/global.1deg/2020.10.22
+          - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/ocean/grids/vertical/global.1deg/2020.10.22
+          - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/ocean/processor_masks/global.1deg/216.16x15/2020.05.30
+          - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/ocean/chlorophyll/global.1deg/2020.05.30
+          - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/ocean/initial_conditions/global.1deg/2020.10.22
+          - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/ocean/tides/global.1deg/2020.05.30
+          - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/ocean/surface_salt_restoring/global.1deg/2020.05.30      
       ncpus: 216
+      nnodes: 3
+      npernode: 72  
+      partition: dcgp_usr_prod
 
     - name: ice
       model: cice5
-      exe: /g/data/ik11/inputs/access-om2/bin/cice_auscom_360x300_24p_edcfa6f_libaccessom2_d750b4b.exe
-      input: /g/data/ik11/inputs/access-om2/input_20201102/cice_1deg
-      ncpus: 24
+      exe: /leonardo/home/userexternal/ntilinin/COSIMA/access-om2/bin/cice_auscom_360x300_24p_edcfa6f-modified_libaccessom2_444ac5d.exe
+      input: 
+#        - /g/data/ik11/inputs/access-om2/input_20201102/cice_1deg
+        - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/ice/grids/global.1deg/2020.05.30
+        - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/ice/grids/global.1deg/2020.10.22
+        - /leonardo_scratch/fast/ICT26_ESP/ntilinin/INPUT/access-om2/ice/initial_conditions/global.1deg/2020.05.30
+      nnodes: 1
+      npernode: 24
+      ncpus: 24     
+      partition: dcgp_usr_prod
+     #mem: 200GB
+
 
 # Collation
 collate:
   restart: true
-  walltime: 1:00:00
-  mem: 30GB
+  walltime: 01:30:00
+  mem: 30G
   ncpus: 4
-  queue: normal
-  exe: /g/data/ik11/inputs/access-om2/bin/mppnccombine
+  nnodes: 1
+  npernode: 4
+  partition: dcgp_usr_prod
+  scheduler: slurm
+    #queue: do not set for slurm
+  exe: /leonardo/home/userexternal/ntilinin/COSIMA/access-om2/bin/mppnccombine
 
+sync:
+    enable: False # set path below and change to true
+    #path: null # Set to location on /g/data or a remote server and path (rsync syntax)
+    #path: /leonardo_scratch/fast/ICT26_ESP/ntilinin/1deg_jra55_ryf_bench_cice5 
+    restarts: True 
+    exclude_uncollated: False
+    #remove_local_files: True
+    #remove_local_dirs: True
+    mem: 2G
+    ncpus: 4
+    nnodes: 1
+    npernode: 4
+
+
+mpi:
+  runcmd: srun
 # Misc
 runlog: true
 stacksize: unlimited
 restart_freq: 1  # use tidy_restarts.py instead
-mpirun: --mca io ompio --mca io_ompio_num_aggregators 1
-qsub_flags: -W umask=027
+#mpirun: --mca io ompio --mca io_ompio_num_aggregators 1
+#qsub_flags: -W umask=027
+qsub_flags: umask 027
+
 env:
     UCX_LOG_LEVEL: 'error'
+    LD_LIBRARY_PATH: /leonardo/home/userexternal/ntilinin/ACCESS-NRI/release/linux-rhel8-x86_64/intel-2021.2.0/netcdf-c-4.7.4-d4klyvujjjphnqh76j26kamyunbrkb34/lib:/leonardo/home/userexternal/ntilinin/ACCESS-NRI/release/linux-rhel8-x86_64/intel-2021.2.0/netcdf-fortran-4.5.2-5ln2rw27vpecnfidohaao4crc4x5wfo7/lib:/leonardo/home/userexternal/ntilinin/ACCESS-NRI/release/linux-rhel8-x86_64/intel-2021.2.0/openmpi-4.1.4-ga6avsdxmjya35twagfjts7jp3yahbwt/lib:$LD_LIBRARY_PATH
+    OMPI_MCA_btl_tcp_if_include: ib0
+    MCA_IO: ompio
+    MCA_IO_OMPIO_NUM_AGGREGATORS: 1
+
 # set number of cores per node (28 for normalbw, 48 for normal on gadi)
 platform:
-    nodesize: 48
+    nodesize: 112
+
 # sweep and resubmit on specific errors - see https://github.com/payu-org/payu/issues/241#issuecomment-610739771
 userscripts:
     error: resub.sh
